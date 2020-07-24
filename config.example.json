@@ -1,0 +1,14 @@
+{
+  "instances": [{
+    "addr": ""
+  }],
+  "aws": {
+    "clientId": "",
+    "clientSecret": "",
+    "region": "",
+    "sender": ""
+  },
+  "uri": "",
+  "timeout": 3,
+  "recipient": ""
+}
