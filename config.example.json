@@ -1,4 +1,10 @@
 {
+  "group": [{
+    "type": "any",
+    "instances": [{
+      "addr": ""
+    }]
+  }],
   "instances": [{
     "addr": ""
   }],

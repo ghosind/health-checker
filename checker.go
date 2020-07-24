@@ -27,9 +27,16 @@ type Instance struct {
 	Addr string
 }
 
+// InstanceGroup The configurations of the group of instances.
+type InstanceGroup struct {
+	Instances []Instance
+	Type      string
+}
+
 // CheckerConfig The Configrations of health checker.
 type CheckerConfig struct {
 	Instances []Instance
+	Groups    []InstanceGroup
 	AWS       AWSConfig
 	URI       string
 	Timeout   int
@@ -60,8 +67,12 @@ func main() {
 // sendEmail Send check report to specified email.
 func sendEmail(config CheckerConfig, content string) {
 	session, err := session.NewSession(&aws.Config{
-		Region:      aws.String(config.AWS.Region),
-		Credentials: credentials.NewStaticCredentials(config.AWS.ClientID, config.AWS.ClientSecret, ""),
+		Region: aws.String(config.AWS.Region),
+		Credentials: credentials.NewStaticCredentials(
+			config.AWS.ClientID,
+			config.AWS.ClientSecret,
+			"",
+		),
 	})
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -119,15 +130,22 @@ func readConfig(path string) *CheckerConfig {
 	return &cfg
 }
 
-// checkInstances Get the statuses of instances, and return the unreachable instance list.
+// checkInstances Get the statuses of instances, and return the unreachable
+// instance list.
 func checkInstances(config CheckerConfig) []string {
 	ch := make(chan CheckResult)
-	expect := len(config.Instances)
+	expect := getInstanceCount(config)
 	actual := 0
 	messages := make([]string, 0, expect)
 
-	for _, instance := range config.Instances {
-		go checkInstance(instance, config, ch)
+	if config.Instances != nil {
+		for _, instance := range config.Instances {
+			go checkInstance(instance, config, ch)
+		}
+	}
+
+	if config.Groups != nil {
+		// TODO
 	}
 
 	for v := range ch {
@@ -145,8 +163,29 @@ func checkInstances(config CheckerConfig) []string {
 	return messages
 }
 
+// getInstanceCount Gets the count of instances including groups.
+func getInstanceCount(config CheckerConfig) int {
+	count := 0
+
+	if config.Instances != nil {
+		count += len(config.Instances)
+	}
+
+	if config.Groups != nil {
+		for _, group := range config.Groups {
+			count += len(group.Instances)
+		}
+	}
+
+	return count
+}
+
 // checkInstance Get the status of specified instance.
-func checkInstance(instance Instance, config CheckerConfig, ch chan CheckResult) {
+func checkInstance(
+	instance Instance,
+	config CheckerConfig,
+	ch chan CheckResult,
+) {
 	var result CheckResult
 
 	url := instance.Addr + config.URI
