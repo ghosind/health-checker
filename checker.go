@@ -45,8 +45,8 @@ type CheckerConfig struct {
 
 // CheckResult The result for check instance status.
 type CheckResult struct {
-	URL    string
-	Status bool
+	Message string
+	Status  bool
 }
 
 func main() {
@@ -145,13 +145,17 @@ func checkInstances(config CheckerConfig) []string {
 	}
 
 	if config.Groups != nil {
-		// TODO
+		for _, group := range config.Groups {
+			// TODO
+			for _, instance := range group.Instances {
+				go checkInstance(instance, config, ch)
+			}
+		}
 	}
 
-	for v := range ch {
-		if !v.Status {
-			msg := "Check instance " + v.URL + " failed."
-			messages = append(messages, msg)
+	for res := range ch {
+		if !res.Status {
+			messages = append(messages, res.Message)
 		}
 
 		actual++
@@ -195,12 +199,12 @@ func checkInstance(
 	}
 
 	result.Status = true
-	result.URL = url
 
 	_, err := client.Get(url)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		result.Status = false
+		result.Message = "Check instance " + url + " failed."
 	}
 
 	ch <- result
