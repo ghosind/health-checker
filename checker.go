@@ -71,7 +71,7 @@ func sendEmail(config CheckerConfig, content string) {
 		Credentials: credentials.NewStaticCredentials(
 			config.AWS.ClientID,
 			config.AWS.ClientSecret,
-			"",
+			"", // token is optional parameter.
 		),
 	})
 	if err != nil {
@@ -204,7 +204,7 @@ func checkInstance(
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		result.Status = false
-		result.Message = "Check instance " + url + " failed."
+		result.Message = "Check instance " + instance.Addr + " failed (error: " + err.Error() + ")"
 	}
 
 	ch <- result
