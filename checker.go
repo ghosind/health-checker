@@ -207,19 +207,20 @@ func checkGroup(group InstanceGroup, config CheckerConfig, ch chan CheckResult) 
 		}
 	}
 
-
+	if group.Type != "all" && group.Type != "any" {
+		// The default type is 'all'
+		group.Type = "all"
+	}
 
 	switch group.Type {
 	case "all":
 		if failed > 0 {
+			// The status of the group will be false when some instances were failed.
 			result.Status = false
 		}
 	case "any":
 		if failed == len(group.Instances) {
-			result.Status = false
-		}
-	default:
-		if failed > 0 {
+			// The status of the group will be false when all instances were failed.
 			result.Status = false
 		}
 	}
