@@ -31,6 +31,7 @@ type Instance struct {
 type InstanceGroup struct {
 	Instances []Instance
 	Type      string
+	Name 			string
 }
 
 // CheckerConfig The Configrations of health checker.
@@ -60,7 +61,7 @@ func main() {
 
 	messages := checkInstances(*config)
 	if len(messages) > 0 {
-		sendEmail(*config, strings.Join(messages, "\n"))
+		sendEmail(*config, strings.Join(messages, "\n\n"))
 	}
 }
 
@@ -146,10 +147,7 @@ func checkInstances(config CheckerConfig) []string {
 
 	if config.Groups != nil {
 		for _, group := range config.Groups {
-			// TODO
-			for _, instance := range group.Instances {
-				go checkInstance(instance, config, ch)
-			}
+			go checkGroup(group, config, ch)
 		}
 	}
 
@@ -176,12 +174,61 @@ func getInstanceCount(config CheckerConfig) int {
 	}
 
 	if config.Groups != nil {
-		for _, group := range config.Groups {
-			count += len(group.Instances)
-		}
+		count += len(config.Groups)
 	}
 
 	return count
+}
+
+// checkGroup Gets the statuses of instances of the group.
+func checkGroup(group InstanceGroup, config CheckerConfig, ch chan CheckResult) {
+	instancesChan := make(chan CheckResult)
+	num := 0
+	failed := 0
+	messages := make([]string, 0, len(group.Instances))
+
+	var result CheckResult
+	result.Status = true
+
+	for _, instance := range group.Instances {
+		go checkInstance(instance, config, instancesChan)
+	}
+
+	for res := range instancesChan {
+		if !res.Status {
+			messages = append(messages, res.Message)
+			failed++
+		}
+
+		num++
+
+		if num == len(group.Instances) {
+			close(instancesChan)
+		}
+	}
+
+
+
+	switch group.Type {
+	case "all":
+		if failed > 0 {
+			result.Status = false
+		}
+	case "any":
+		if failed == len(group.Instances) {
+			result.Status = false
+		}
+	default:
+		if failed > 0 {
+			result.Status = false
+		}
+	}
+
+	if result.Status == false {
+		result.Message = "Check group " + group.Name + " failed:\n\t" + strings.Join(messages, "\n\t")
+	}
+
+	ch <- result
 }
 
 // checkInstance Get the status of specified instance.

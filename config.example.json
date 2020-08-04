@@ -1,6 +1,7 @@
 {
   "group": [{
     "type": "any",
+    "name": "",
     "instances": [{
       "addr": ""
     }]
