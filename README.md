@@ -1,6 +1,6 @@
 # health-checker
 
-![go](https://github.com/ghosind/health-checker/workflows/go/badge.svg)
+![build](https://github.com/ghosind/health-checker/workflows/build/badge.svg)
 
 A simple server instances health status checker, and it will send alarm notifications to specified email via [AWS SES](https://aws.amazon.com/cn/ses/).
 
