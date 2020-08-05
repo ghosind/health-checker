@@ -25,6 +25,7 @@ type AWSConfig struct {
 // Instance The configurations of server instance.
 type Instance struct {
 	Addr string
+	URI  string
 }
 
 // InstanceGroup The configurations of the group of instances.
@@ -240,7 +241,13 @@ func checkInstance(
 ) {
 	var result CheckResult
 
-	url := instance.Addr + config.URI
+	// Use global uri if no special uri specified.
+	var url string
+	if instance.URI != "" {
+		url = instance.Addr + instance.URI
+	} else {
+		url = instance.Addr + config.URI
+	}
 
 	client := http.Client{
 		Timeout: time.Duration(config.Timeout) * time.Second,

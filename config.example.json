@@ -5,9 +5,18 @@
     "instances": [{
       "addr": ""
     }]
+  }, {
+    "type": "all",
+    "name": "",
+    "instances": [{
+      "addr": ""
+    }]
   }],
   "instances": [{
     "addr": ""
+  }, {
+    "addr": "",
+    "uri": ""
   }],
   "aws": {
     "clientId": "",
