@@ -1,6 +1,6 @@
 # health-checker
 
-![build](https://github.com/ghosind/health-checker/workflows/build/badge.svg)
+![Build](https://github.com/ghosind/health-checker/workflows/Build/badge.svg)
 
 A simple server instances health status checker, and it will send alarm notifications to specified email via [AWS SES](https://aws.amazon.com/cn/ses/).
 
@@ -15,38 +15,38 @@ A simple server instances health status checker, and it will send alarm notifica
 
 ## Configurations
 
-| Name | Value Type | Description |
-|:----:|:----------:|:------------|
-| `uri` | String | The uri for health check |
-| `timeout` | Number | The request timeout in seconds |
-| `groups` | Array<[`Group`](#group)> | Instance groups config |
-| `instances` | Array<[`Instance`](#instance)> | Instances config (without group) |
-| `aws` | [`AWS`](#aws) | AWS credential and settings |
-| `recipient` | String | The email address to receive alarm notification |
+| Name | Value Type | Description | Optional |
+|:----:|:----------:|:------------|:--------:|
+| `uri` | String | The uri for health check | |
+| `timeout` | Number | The request timeout in seconds | |
+| `groups` | Array<[`Group`](#group)> | Instance groups config | √ |
+| `instances` | Array<[`Instance`](#instance)> | Instances config (without group) | √ |
+| `aws` | [`AWS`](#aws) | AWS credential and settings | |
+| `recipient` | String | The email address to receive alarm notification | |
 
 ### Group
 
-| Name | Value Type | Description |
-|:----:|:----------:|:------------|
-| `name` | String | Group name |
-| `type` | `'all'` or `'any'` | See [Group Type](#group-type) section |
-| `instances` | Array<[`Instance`](#instance)> | The instances of this group |
+| Name | Value Type | Description | Optional |
+|:----:|:----------:|:------------|:--------:|
+| `name` | String | Group name | |
+| `type` | `'all'` or `'any'` | See [Group Type](#group-type) section, default `all` | √ |
+| `instances` | Array<[`Instance`](#instance)> | The instances of this group | |
 
 ### Instance
 
-| Name | Value Type | Description |
-|:----:|:----------:|:------------|
-| `addr` | String | Instance address |
-| `uri` | String | The uri of health check for this instance |
+| Name | Value Type | Description | Optional |
+|:----:|:----------:|:------------|:--------:|
+| `addr` | String | Instance address | |
+| `uri` | String | The uri of health check for this instance | √ |
 
 ### AWS
 
-| Name | Value Type | Description |
-|:----:|:----------:|:------------|
-| `clientId` | String | Your AWS access key id |
-| `clientSecret` | String | Your AWS secret access key |
-| `region` | String | AWS region |
-| `sender` | String | The sender email that must be verified with SES |
+| Name | Value Type | Description | Optional |
+|:----:|:----------:|:------------|:--------:|
+| `clientId` | String | Your AWS access key id | |
+| `clientSecret` | String | Your AWS secret access key | |
+| `region` | String | AWS region | |
+| `sender` | String | The sender email that must be verified with SES | |
 
 ### Group Type
 
