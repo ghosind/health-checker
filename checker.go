@@ -32,7 +32,7 @@ type Instance struct {
 type InstanceGroup struct {
 	Instances []Instance
 	Type      string
-	Name 			string
+	Name      string
 }
 
 // CheckerConfig The Configrations of health checker.
@@ -214,12 +214,12 @@ func checkGroup(group InstanceGroup, config CheckerConfig, ch chan CheckResult) 
 	}
 
 	switch group.Type {
-	case "all":
+	case "any":
 		if failed > 0 {
 			// The status of the group will be false when some instances were failed.
 			result.Status = false
 		}
-	case "any":
+	case "all":
 		if failed == len(group.Instances) {
 			// The status of the group will be false when all instances were failed.
 			result.Status = false

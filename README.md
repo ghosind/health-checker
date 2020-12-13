@@ -52,8 +52,8 @@ A simple server instances health status checker, and it will send alarm notifica
 
 The group support the following types:
 
-- `all`: The group will be failed if some instances are unreachable.
-- `any`: The group will be failed if all instances are unreachable.
+- `any`: The group will be failed if any instance(s) are unreachable.
+- `all`: The group will be failed if all instance(s) are unreachable.
 
 ## Example
 
