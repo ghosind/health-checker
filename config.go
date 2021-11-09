@@ -35,7 +35,8 @@ type CheckerConfig struct {
 	AWS       AWSConfig
 	URI       string
 	Timeout   int
-	Recipient string
+	Receivers *[]*string
+	Receiver  *string
 }
 
 // loadConfig gets configurations from file.

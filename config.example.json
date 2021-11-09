@@ -26,5 +26,8 @@
   },
   "uri": "",
   "timeout": 3,
-  "recipient": ""
+  "receivers": [
+    ""
+  ],
+  "receiver": ""
 }

@@ -23,7 +23,8 @@ A simple servers health status checker, and it will send notifications to specif
 | `groups` | Array<[`Group`](#group)> | Instance groups config | √ |
 | `instances` | Array<[`Instance`](#instance)> | Instances config (without group) | √ |
 | `aws` | [`AWS`](#aws) | AWS credential and settings | |
-| `recipient` | String | The email address to receive alarm notification | |
+| `receivers` | []String | The email addresses to receive notification | |
+| `receiver` | String | The email address to receive notification | |
 
 ### Group
 
