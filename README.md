@@ -1,14 +1,15 @@
 # health-checker
 
 ![Build](https://github.com/ghosind/health-checker/workflows/Build/badge.svg)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/eadcb3537da04e8c9ea2f7cbdd8b49c0)](https://www.codacy.com/gh/ghosind/health-checker/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ghosind/health-checker&amp;utm_campaign=Badge_Grade)
 
-A simple server instances health status checker, and it will send alarm notifications to specified email via [AWS SES](https://aws.amazon.com/cn/ses/).
+A simple servers health status checker, and it will send notifications to specific emails via [AWS SES](https://aws.amazon.com/cn/ses/).
 
 ## Getting Start
 
 1. Download this repo.
 2. Run `go build` to build binary executable file.
-    - Run `make` to make binary executable file for x86-64 Linux.
+    - Run `make linux_x64` to make binary executable file for x86-64 Linux.
 3. Create your config json file, see the [Configuration](#configuration) or [Example](#example) section for details.
 4. Run `health-checker config.json` to test it. (replace `config.json` to your config file path)
 5. Add it into crontab. (Optional)
