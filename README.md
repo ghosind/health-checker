@@ -20,11 +20,13 @@ A simple servers health status checker, and it will send notifications to specif
 |:----:|:----------:|:------------|:--------:|
 | `uri` | String | The uri for health check | |
 | `timeout` | Number | The request timeout in seconds | |
-| `groups` | Array<[`Group`](#group)> | Instance groups config | √ |
-| `instances` | Array<[`Instance`](#instance)> | Instances config (without group) | √ |
+| `groups` | Array\<[`Group`](#group)\> | Instance groups config | √ |
+| `instances` | Array\<[`Instance`](#instance)\> | Instances config (without group) | √ |
 | `aws` | [`AWS`](#aws) | AWS credential and settings | |
-| `receivers` | []String | The email addresses to receive notification | |
-| `receiver` | String | The email address to receive notification | |
+| `receivers` | Array\<String\> | The email addresses to receive notification | * |
+| `receiver` | String | The email address to receive notification | * |
+
+\* Either of `receivers` and `receiver` is required.
 
 ### Group
 
@@ -32,7 +34,7 @@ A simple servers health status checker, and it will send notifications to specif
 |:----:|:----------:|:------------|:--------:|
 | `name` | String | Group name | |
 | `type` | `'all'` or `'any'` | See [Group Type](#group-type) section, default `all` | √ |
-| `instances` | Array<[`Instance`](#instance)> | The instances of this group | |
+| `instances` | Array\<[`Instance`](#instance)\> | The instances of this group | |
 
 ### Instance
 
@@ -92,7 +94,10 @@ There are a configuration file example:
     "region": "<your_aws_region>",
     "sender": "<your_sender_email>"
   },
-  "recipient" "<your_email>"
+  "receivers": [
+    "user1@example.com",
+    "user2@example.com"
+  ]
 }
 ```
 

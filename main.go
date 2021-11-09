@@ -1,14 +1,14 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"strings"
 )
 
 func main() {
 	if len(os.Args) != 2 {
-		log.Println("Usages: health-checker <config_file>")
+		printHelp()
 		os.Exit(1)
 	}
 
@@ -19,4 +19,11 @@ func main() {
 	if len(messages) > 0 {
 		sendEmail(*config, strings.Join(messages, "\n\n"))
 	}
+}
+
+func printHelp() {
+	fmt.Fprintf(os.Stderr, `health-checker %s
+
+Usages: health-checker <config_file>
+`, Version)
 }
