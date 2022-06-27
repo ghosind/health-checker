@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
+	"strings"
 )
 
 // AWSConfig The configuration of AWS client.
@@ -29,7 +29,7 @@ type InstanceGroup struct {
 }
 
 // CheckerConfig The Configrations of health checker.
-type CheckerConfig struct {
+type Config struct {
 	Instances []Instance
 	Groups    []InstanceGroup
 	AWS       AWSConfig
@@ -40,21 +40,34 @@ type CheckerConfig struct {
 }
 
 // loadConfig gets configurations from file.
-func loadConfig(path string) *CheckerConfig {
+func loadConfig(path string) (*Config, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		log.Printf("Failed to open config file %s", err)
-		os.Exit(1)
+		return nil, err
 	}
 
-	var cfg CheckerConfig
+	extension := getFileExtension(file.Name())
+	switch extension {
+	case "json":
+		return parseJsonFile(file)
+	default:
+		return nil, fmt.Errorf("unsupported %s file format", extension)
+	}
+}
 
-	err = json.NewDecoder(file).Decode(&cfg)
+func parseJsonFile(file *os.File) (*Config, error) {
+	cfg := new(Config)
+
+	err := json.NewDecoder(file).Decode(cfg)
 	if err != nil {
-		log.Printf("Failed to decode config file: %v", err)
-		os.Exit(1)
+		return nil, err
 	}
 
-	return &cfg
+	return cfg, nil
+}
+
+func getFileExtension(name string) string {
+	arr := strings.Split(name, ".")
+
+	return strings.ToLower(arr[len(arr)-1])
 }

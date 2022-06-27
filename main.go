@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 )
@@ -13,11 +14,14 @@ func main() {
 	}
 
 	configPath := os.Args[1]
-	config := loadConfig(configPath)
+	config, err := loadConfig(configPath)
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
 
-	messages := checkInstances(*config)
+	messages := checkInstances(config)
 	if len(messages) > 0 {
-		sendEmail(*config, strings.Join(messages, "\n\n"))
+		sendEmail(config, strings.Join(messages, "\n\n"))
 	}
 }
 

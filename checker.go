@@ -15,7 +15,7 @@ type CheckResult struct {
 
 // checkInstances gets the statuses of instances, and return the unreachable
 // instance list.
-func checkInstances(config CheckerConfig) []string {
+func checkInstances(config *Config) []string {
 	ch := make(chan CheckResult)
 	expect := getInstanceCount(config)
 	actual := 0
@@ -48,7 +48,7 @@ func checkInstances(config CheckerConfig) []string {
 }
 
 // getInstanceCount gets the count of instances including groups.
-func getInstanceCount(config CheckerConfig) int {
+func getInstanceCount(config *Config) int {
 	count := 0
 
 	if config.Instances != nil {
@@ -63,7 +63,7 @@ func getInstanceCount(config CheckerConfig) int {
 }
 
 // checkGroup gets the statuses of instances of the group.
-func checkGroup(group InstanceGroup, config CheckerConfig, ch chan CheckResult) {
+func checkGroup(group InstanceGroup, config *Config, ch chan CheckResult) {
 	instancesChan := make(chan CheckResult)
 	num := 0
 	failed := 0
@@ -117,7 +117,7 @@ func checkGroup(group InstanceGroup, config CheckerConfig, ch chan CheckResult) 
 // checkInstance sends request to specifc server and creates report if it has failed.
 func checkInstance(
 	instance Instance,
-	config CheckerConfig,
+	config *Config,
 	ch chan CheckResult,
 ) {
 	var result CheckResult

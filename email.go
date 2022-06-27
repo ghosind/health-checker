@@ -11,7 +11,7 @@ import (
 )
 
 // sendEmail sends report to specific emails.
-func sendEmail(config CheckerConfig, content string) {
+func sendEmail(config *Config, content string) {
 	cli := getSesClient(config)
 	receivers := getReceivers(config)
 
@@ -45,7 +45,7 @@ func sendEmail(config CheckerConfig, content string) {
 }
 
 // getReceivers gets receivers email from config.
-func getReceivers(config CheckerConfig) []*string {
+func getReceivers(config *Config) []*string {
 	receivers := make([]*string, 0)
 
 	if config.Receivers != nil && len(*config.Receivers) > 0 {
@@ -69,7 +69,7 @@ func getReceivers(config CheckerConfig) []*string {
 }
 
 // getSesClient creates new AWS session and returns AWS SES client.
-func getSesClient(config CheckerConfig) *ses.SES {
+func getSesClient(config *Config) *ses.SES {
 	session, err := session.NewSession(&aws.Config{
 		Region: aws.String(config.AWS.Region),
 		Credentials: credentials.NewStaticCredentials(
