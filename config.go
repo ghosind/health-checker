@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 )
 
 // AWSConfig The configuration of AWS client.
@@ -58,8 +60,17 @@ func loadConfig(path string) (*Config, error) {
 func parseJsonFile(file *os.File) (*Config, error) {
 	cfg := new(Config)
 
-	err := json.NewDecoder(file).Decode(cfg)
-	if err != nil {
+	if err := json.NewDecoder(file).Decode(cfg); err != nil {
+		return nil, err
+	}
+
+	return cfg, nil
+}
+
+func parseYamlFile(file *os.File) (*Config, error) {
+	cfg := new(Config)
+
+	if err := yaml.NewDecoder(file).Decode(cfg); err != nil {
 		return nil, err
 	}
 
