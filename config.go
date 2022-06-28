@@ -52,6 +52,8 @@ func loadConfig(path string) (*Config, error) {
 	switch extension {
 	case "json":
 		return parseJSONFile(file)
+	case "yaml", "yml":
+		return parseYAMLFile(file)
 	default:
 		return nil, fmt.Errorf("unsupported %s file format", extension)
 	}
