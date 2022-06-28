@@ -1,0 +1,23 @@
+group:
+- type: any
+  name: ""
+  instances:
+  - addr: ""
+- type: all
+  name: ""
+  instances:
+  - addr: ""
+instances:
+- addr: ""
+- addr: ""
+  uri: ""
+aws:
+  clientId: ""
+  clientSecret: ""
+  region: ""
+  sender: ""
+uri: ""
+timeout: 3
+receivers:
+- ""
+receiver: ""
