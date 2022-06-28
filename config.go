@@ -30,7 +30,7 @@ type InstanceGroup struct {
 	Name      string
 }
 
-// CheckerConfig The Configrations of health checker.
+// Config is the configuration of the health checker.
 type Config struct {
 	Instances []Instance
 	Groups    []InstanceGroup
@@ -51,13 +51,13 @@ func loadConfig(path string) (*Config, error) {
 	extension := getFileExtension(file.Name())
 	switch extension {
 	case "json":
-		return parseJsonFile(file)
+		return parseJSONFile(file)
 	default:
 		return nil, fmt.Errorf("unsupported %s file format", extension)
 	}
 }
 
-func parseJsonFile(file *os.File) (*Config, error) {
+func parseJSONFile(file *os.File) (*Config, error) {
 	cfg := new(Config)
 
 	if err := json.NewDecoder(file).Decode(cfg); err != nil {
@@ -67,7 +67,7 @@ func parseJsonFile(file *os.File) (*Config, error) {
 	return cfg, nil
 }
 
-func parseYamlFile(file *os.File) (*Config, error) {
+func parseYAMLFile(file *os.File) (*Config, error) {
 	cfg := new(Config)
 
 	if err := yaml.NewDecoder(file).Decode(cfg); err != nil {

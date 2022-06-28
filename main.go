@@ -25,6 +25,7 @@ func main() {
 	}
 }
 
+// printHelp prints application version and usage.
 func printHelp() {
 	fmt.Fprintf(os.Stderr, `health-checker %s
 
