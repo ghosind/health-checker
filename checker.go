@@ -123,12 +123,7 @@ func checkInstance(
 	var result CheckResult
 
 	// Set to global uri if no specific uri in instance config.
-	var url string
-	if instance.URI != "" {
-		url = instance.Addr + instance.URI
-	} else {
-		url = instance.Addr + config.URI
-	}
+	url := getRequestUrl(instance, config)
 
 	client := http.Client{
 		Timeout: time.Duration(config.Timeout) * time.Second,
@@ -144,4 +139,25 @@ func checkInstance(
 	}
 
 	ch <- result
+}
+
+// getRequestUrl make destination url by instance or global config.
+func getRequestUrl(instance Instance, config *Config) string {
+	url := ""
+
+	if instance.Scheme != "" {
+		url = instance.Scheme + "://"
+	} else if config.Scheme != "" {
+		url = config.Scheme + "://"
+	} else {
+		url = "http://"
+	}
+
+	if instance.URI != "" {
+		url += instance.Addr + instance.URI
+	} else {
+		url += instance.Addr + config.URI
+	}
+
+	return url
 }

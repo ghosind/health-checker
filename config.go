@@ -19,8 +19,9 @@ type AWSConfig struct {
 
 // Instance The configurations of server instance.
 type Instance struct {
-	Addr string
-	URI  string
+	Addr   string
+	URI    string
+	Scheme string
 }
 
 // InstanceGroup The configurations of the group of instances.
@@ -36,6 +37,7 @@ type Config struct {
 	Groups    []InstanceGroup
 	AWS       AWSConfig
 	URI       string
+	Scheme    string
 	Timeout   int
 	Receivers *[]*string
 	Receiver  *string
