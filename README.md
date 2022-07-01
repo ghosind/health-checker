@@ -26,7 +26,7 @@ A simple servers health status checker, and it will send notifications to specif
 | `receivers` | Array\<String\> | The email addresses to receive notification | * |
 | `receiver` | String | The email address to receive notification | * |
 
-\* Either of `receivers` and `receiver` is required.
+\* Either `receivers` or `receiver` is required.
 
 ### Group
 
@@ -59,9 +59,9 @@ The group support the following types:
 - `any`: The group will be failed if any instance(s) are unreachable.
 - `all`: The group will be failed if all instance(s) are unreachable.
 
-## Example
+## Example configurations
 
-There are a configuration file example:
+There are a JSON example configuration file:
 
 ```json
 {
@@ -99,6 +99,35 @@ There are a configuration file example:
     "user2@example.com"
   ]
 }
+```
+
+It also support YAML configuration file:
+
+```yaml
+group:
+- name: "Group 1"
+  type: all
+  instances:
+  - addr: "192.168.1.100:8000"
+  - addr: "192.168.1.100:8001"
+- name: "Group 2"
+  type: any
+  instances:
+  - addr: "192.168.1.101:8000"
+  - addr: "192.168.1.101:8001"
+instances:
+- addr: "192.168.1.101"
+  uri: /health/special
+uri: /health/check
+timeout: 5
+aws:
+  clientId: <your_aws_access_key_id>
+  clientSecret: <your_aws_secret_access_key>
+  region: <your_aws_region>
+  sender: <your_sender_email>
+receivers:
+- user1@example.com
+- user2@example.com
 ```
 
 ## License
